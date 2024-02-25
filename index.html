@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My first page with Vue</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="row title">
+                <div class="col-xs-12">
+                    <h2>Top 100 Cryptocurriencies <small>by Market Capitalization</small></h2>
+                </div>
+            </div>
+            <div v-if="loading" class="row title">
+                <div class="col-xs-12">
+                    <span>loading...</span>
+                </div>
+            </div>
+            <template >
+                <div class="row">
+                    <div class="col-xs-12">
+                        <thead>
+                            <tr>
+                                <td>#</td>
+                                <td>name</td>
+                                <td>market cap</td>
+                                <td>price</td>
+                                <td>volume</td>
+                                <td>circulating supply</td>
+                                <td>change</td>
+                                <td>price graph</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="name in names">
+                                <td><span> {{ name.id }} </span></td>
+                                <td><span> ghtydifvkh </span></td>
+                            </tr>
+                        </tbody>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+    <script>
+        import {ref} from "vue";
+        new Vue({
+            el: "#app",
+            data: {
+                loading: false,
+                names: ref([]),
+                check: false
+            },
+            methods: {
+                loadNames: function(){
+                    this.loading = true;
+                    //axios.get('https://api.coinmarketcap.com/v2/ticker/?start=1&limit=100&sort=id&structure=array')
+                    axios.get('http://jsonplaceholder.typicode.com/posts')
+                    .then(function(response){
+                        this.names = response.data;
+                        this.loading = false;
+                        console.log(this.names)
+                        this.check = true
+                    })
+                    .catch(function(error){
+                        self.loading = false;
+                    });
+                }
+                
+            },
+            computed: {
+            },
+            mounted() {
+                this.$nextTick(function () {
+                    // Код, который будет запущен только после
+                    // отрисовки всех представлений
+                    this.loadNames();
+                })
+            },
+        })
+
+        
+        
+    </script>
+</body>
+</html>
